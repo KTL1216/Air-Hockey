@@ -1,70 +1,116 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const ballSize = 10;
-const pHeight = 100, pWidth = 50;
-
-var player1X, player1Y;
-var Player2X, player2Y;
-
 const Ball = {
   x: 500,
   y: 275,
   radius: 10,
-  speed: 10
+  speed: 3,
+  angle: 5*Math.PI/8
 }
 
 const Player1 = {
   x: 40,
   y: 225,
   width: 10,
-  height: 100
+  height: 100,
+  score: 0,
+  speed: 0
 }
 
 const Player2 = {
   x: 950,
   y: 225,
   width: 10,
-  height: 100
+  height: 100,
+  score: 0,
+  speed: 0
 }
 
 function paint() { 
   ctx.beginPath();
   ctx.fillStyle = "#FFFFFF";
+
+  ctx.font = "50px Arial";
+  ctx.fillText(Player1.score, 425, 70);
+  ctx.fillText(Player2.score, 545, 70);
+
   ctx.arc(Ball.x, Ball.y, Ball.radius, 0, Math.PI * 2);
   ctx.fillRect(Player1.x, Player1.y, Player1.width, Player1.height);
   ctx.fillRect(Player2.x, Player2.y, Player2.width, Player2.height);
+  ctx.fillRect(498,1,4,548);
   ctx.fill();
+
+
 }
 
-document.addEventListener('keypress', event => {
-  if (event.key === 'w') {
-    Player1.y -= 10;
+document.addEventListener('keydown', e => {
+  if (e.key === 'w') {
+    Player1.speed = -3;
   }
-  if (event.key === 's') {
-    Player1.y += 10;
+  if (e.key === 's') {
+    Player1.speed = 3;
   }
-  if (event.key === 'i') {
-    Player2.y -= 10;
+  if (e.key === 'i') {
+    Player2.speed = -3;
   }
-  if (event.key === 'k') {
-    Player2.y += 10;
+  if (e.key === 'k') {
+    Player2.speed = 3;
   }
 })
 
+document.addEventListener('keyup', e => {
+  Player1.speed = 0;
+  Player2.speed = 0;
+})
+
+function move() {
+  Player1.y += Player1.speed;
+  Player2.y += Player2.speed;
+}
+
 function checkCollision(){
-  if(Ball.y + Ball.radius >= canvas.height || Ball.y - Ball.radius <= 0)
-    Ball.y = -Ball.y;
-  if(Ball.x + Ball.radius >= canvas.width || Ball.x - Ball.radius <= 0){
+  if(Ball.y + Ball.radius >= canvas.height || Ball.y - Ball.radius <= 0){
+    Ball.angle = 2 * Math.PI - Ball.angle;
+  }
+
+  if(Ball.x + Ball.radius >= canvas.width){
     Ball.x = 500;
     Ball.y = 275;
+    Player2.score++;
   }
+
+  if(Ball.x - Ball.radius <= 0){
+    Ball.x = 500;
+    Ball.y = 275;
+    Player1.score++;
+  }
+
+  if(Ball.y >= Player1.y + Ball.radius && Ball.y + Ball.radius <= Player1.y + Player1.height){
+    if(Ball.x - Ball.radius <= Player1.x + Player1.width){
+      Ball.angle = Math.PI - Ball.angle;
+    }
+  }
+
+  if(Ball.y >= Player2.y + Ball.radius && Ball.y + Ball.radius <= Player2.y + Player2.height){
+    if(Ball.x + Ball.radius >= Player2.x){
+      Ball.angle = Math.PI - Ball.angle;
+    }
+  }
+
+  if(Player1.y <= 0)
+    Player1.speed = 0;
 
 }
 
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  Ball.x += Ball.speed * Math.cos(Ball.angle);
+  Ball.y += Ball.speed * Math.sin(Ball.angle);
+
+  move();
+  checkCollision();
   paint();
 
   requestAnimationFrame(update);
@@ -72,9 +118,3 @@ function update() {
 
 update();
 
-
-
-class gameState {
-
-
-}
