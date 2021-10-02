@@ -6,7 +6,7 @@ const Ball = {
   y: 275,
   radius: 10,
   speed: 3,
-  angle: 5*Math.PI/8
+  angle: Math.random() * 2 * Math.PI
 }
 
 const Player1 = {
@@ -65,15 +65,22 @@ document.addEventListener('keyup', e => {
 })
 
 function move() {
-  Player1.y += Player1.speed;
-  Player2.y += Player2.speed;
+  if((Player1.y >= 0 && Player1.speed <= 0) || (Player1.y + Player1.height <= canvas.height && Player1.speed >= 0)){ 
+    Player1.y += Player1.speed;
+  }
+
+  if((Player2.y >= 0 && Player2.speed <= 0) || (Player2.y + Player2.height <= canvas.height && Player2.speed >= 0)){ 
+    Player2 .y += Player2.speed;
+  }
 }
 
 function checkCollision(){
+  //collision with top and bottom
   if(Ball.y + Ball.radius >= canvas.height || Ball.y - Ball.radius <= 0){
     Ball.angle = 2 * Math.PI - Ball.angle;
   }
 
+  //collision with left and right
   if(Ball.x + Ball.radius >= canvas.width){
     Ball.x = 500;
     Ball.y = 275;
@@ -86,17 +93,23 @@ function checkCollision(){
     Player1.score++;
   }
 
-  if(Ball.y >= Player1.y + Ball.radius && Ball.y + Ball.radius <= Player1.y + Player1.height){
-    if(Ball.x - Ball.radius <= Player1.x + Player1.width){
-      Ball.angle = Math.PI - Ball.angle;
-    }
-  }
+  //collision with pedals
+  if(Ball.x + Ball.radius <= Player2.x + Player2.width && Ball.x - Ball.radius >= Player1.x){
 
-  if(Ball.y >= Player2.y + Ball.radius && Ball.y + Ball.radius <= Player2.y + Player2.height){
-    if(Ball.x + Ball.radius >= Player2.x){
-      Ball.angle = Math.PI - Ball.angle;
+    //collision with player1
+    if(Ball.y >= Player1.y + Ball.radius && Ball.y + Ball.radius <= Player1.y + Player1.height){
+      if(Ball.x - Ball.radius <= Player1.x + Player1.width){
+        Ball.angle = Math.PI - Ball.angle;
+      }
     }
-  }
+
+    //collision with player2
+    if(Ball.y >= Player2.y + Ball.radius && Ball.y - Ball.radius <= Player2.y + Player2.height){
+      if(Ball.x + Ball.radius >= Player2.x){
+        Ball.angle = Math.PI - Ball.angle;
+      }
+    }
+ }
 
   if(Player1.y <= 0)
     Player1.speed = 0;
