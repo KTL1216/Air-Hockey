@@ -86,6 +86,7 @@ function checkCollision(){
     Ball.y = 275;
     Player1.score++;
     Ball.speed = 3;
+    Ball.angle = Math.random() * 2 * Math.PI;
   }
 
   if(Ball.x - Ball.radius <= 0){
@@ -93,6 +94,7 @@ function checkCollision(){
     Ball.y = 275;
     Player2.score++;
     Ball.speed = 3;
+    Ball.angle = Math.random() * 2 * Math.PI;
   }
 
   //collision with pedals
