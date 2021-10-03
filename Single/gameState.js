@@ -95,7 +95,7 @@ function checkCollision(){
 
   //collision with pedals
   if(Ball.x + Ball.radius <= Player2.x + Player2.width && Ball.x - Ball.radius >= Player1.x){
-
+    Ball.speed = Ball.speed * 1.3;
     //collision with player1
     if(Ball.y >= Player1.y && Ball.y <= Player1.y + Player1.height){
       if(Ball.x - Ball.radius <= Player1.x + Player1.width){
