@@ -78,6 +78,7 @@ function checkCollision(){
   //collision with top and bottom
   if(Ball.y + Ball.radius >= canvas.height || Ball.y - Ball.radius <= 0){
     Ball.angle = 2 * Math.PI - Ball.angle;
+    Ball.speed = Ball.speed * 1.05;
   }
 
   //collision with left and right
@@ -87,6 +88,9 @@ function checkCollision(){
     Player1.score++;
     Ball.speed = 3;
     Ball.angle = Math.random() * 2 * Math.PI;
+    while (Ball.angle == 0.5 * Math.PI || Ball.angle == 1.5 * Math.PI) {
+      Ball.angle = Math.random() * 2 * Math.PI;
+    }
   }
 
   if(Ball.x - Ball.radius <= 0){
@@ -95,6 +99,9 @@ function checkCollision(){
     Player2.score++;
     Ball.speed = 3;
     Ball.angle = Math.random() * 2 * Math.PI;
+    while (Ball.angle == 0.5 * Math.PI || Ball.angle == 1.5 * Math.PI) {
+      Ball.angle = Math.random() * 2 * Math.PI;
+    }
   }
 
   //collision with pedals
