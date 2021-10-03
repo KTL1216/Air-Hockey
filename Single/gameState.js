@@ -97,14 +97,14 @@ function checkCollision(){
   if(Ball.x + Ball.radius <= Player2.x + Player2.width && Ball.x - Ball.radius >= Player1.x){
 
     //collision with player1
-    if(Ball.y >= Player1.y + Ball.radius && Ball.y + Ball.radius <= Player1.y + Player1.height){
+    if(Ball.y >= Player1.y && Ball.y <= Player1.y + Player1.height){
       if(Ball.x - Ball.radius <= Player1.x + Player1.width){
         Ball.angle = Math.PI - Ball.angle;
       }
     }
 
     //collision with player2
-    if(Ball.y >= Player2.y + Ball.radius && Ball.y - Ball.radius <= Player2.y + Player2.height){
+    if(Ball.y >= Player2.y && Ball.y <= Player2.y + Player2.height){
       if(Ball.x + Ball.radius >= Player2.x){
         Ball.angle = Math.PI - Ball.angle;
       }
@@ -116,17 +116,34 @@ function checkCollision(){
 
 }
 
+function checkWin() {
+  if(Player1.score >= 11) {
+    return "Player 1 Wins"
+  }
+  else if(Player2.score >= 11) {
+    return "Player 2 Wins"
+  }
+  else {
+    return "Continue"
+  }
+}
+
 function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if(checkWin() == "Continue") {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  Ball.x += Ball.speed * Math.cos(Ball.angle);
-  Ball.y += Ball.speed * Math.sin(Ball.angle);
-
-  move();
-  checkCollision();
-  paint();
-
-  requestAnimationFrame(update);
+    Ball.x += Ball.speed * Math.cos(Ball.angle);
+    Ball.y += Ball.speed * Math.sin(Ball.angle);
+  
+    move();
+    checkCollision();
+    paint();
+  
+    requestAnimationFrame(update);
+  }
+  else {
+    alert(checkWin());
+  }
 }
 
 update();
