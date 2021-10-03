@@ -46,16 +46,16 @@ function paint() {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'w') {
-    Player1.speed = -3;
+    Player1.speed = -4;
   }
   if (e.key === 's') {
-    Player1.speed = 3;
+    Player1.speed = 4;
   }
   if (e.key === 'i') {
-    Player2.speed = -3;
+    Player2.speed = -4;
   }
   if (e.key === 'k') {
-    Player2.speed = 3;
+    Player2.speed = 4;
   }
 })
 
@@ -84,22 +84,24 @@ function checkCollision(){
   if(Ball.x + Ball.radius >= canvas.width){
     Ball.x = 500;
     Ball.y = 275;
-    Player2.score++;
+    Player1.score++;
+    Ball.speed = 3;
   }
 
   if(Ball.x - Ball.radius <= 0){
     Ball.x = 500;
     Ball.y = 275;
-    Player1.score++;
+    Player2.score++;
+    Ball.speed = 3;
   }
 
   //collision with pedals
   if(Ball.x + Ball.radius <= Player2.x + Player2.width && Ball.x - Ball.radius >= Player1.x){
-    Ball.speed = Ball.speed * 1.3;
     //collision with player1
     if(Ball.y >= Player1.y && Ball.y <= Player1.y + Player1.height){
       if(Ball.x - Ball.radius <= Player1.x + Player1.width){
         Ball.angle = Math.PI - Ball.angle;
+        Ball.speed = Ball.speed * 1.15;
       }
     }
 
@@ -107,6 +109,7 @@ function checkCollision(){
     if(Ball.y >= Player2.y && Ball.y <= Player2.y + Player2.height){
       if(Ball.x + Ball.radius >= Player2.x){
         Ball.angle = Math.PI - Ball.angle;
+        Ball.speed = Ball.speed * 1.15;
       }
     }
  }
@@ -117,10 +120,10 @@ function checkCollision(){
 }
 
 function checkWin() {
-  if(Player1.score >= 11) {
+  if(Player1.score >= 5) {
     return "Player 1 Wins"
   }
-  else if(Player2.score >= 11) {
+  else if(Player2.score >= 5) {
     return "Player 2 Wins"
   }
   else {
